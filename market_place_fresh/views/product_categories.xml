@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="shops_product_category_form_view" model="ir.ui.view">
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="product.product_category_form_view"/>
+            <field name="arch" type="xml">
+                <group name="first" position="after">
+                    <group name="shops_details" string="Shop Details">
+                        <group>
+                            <field name="cat_slug" />
+                            <field name="cat_icon" />
+                        </group>
+                        <group>
+                            <field name="cat_image" />
+                            <field name="shop_id" />
+                        </group>
+                    </group>
+                    <group string="Description">
+                        <field name="cat_details" />
+                    </group>
+                </group>
+            </field>
+        </record>
+    </data>
+</odoo>

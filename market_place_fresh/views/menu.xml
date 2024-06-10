@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <menuitem id="master_place_fresh_root" name="Market Place Fresh" sequence="10" />
+    <menuitem id="master_place_fresh_shops" name="Shops" parent="master_place_fresh_root" action="master_place_fresh_shops_action" />
+</odoo>

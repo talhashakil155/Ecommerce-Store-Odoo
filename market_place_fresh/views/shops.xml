@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="master_place_fresh_shops_action" model="ir.actions.act_window">
+        <field name="name">Shops</field>
+        <field name="res_model">market.place.shops</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+            Create a new Shop, the first step of a new shop!
+            </p>
+        </field>
+    </record>
+    <record id="master_place_fresh_shops_tree" model="ir.ui.view">
+        <field name="name">market.place.shops.tree</field>
+        <field name="model">market.place.shops</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" />
+                <field name="owner" />
+                <field name="status" />
+                <field name="warehouse_id" />
+                <field name="notifications" />
+            </tree>
+        </field>
+    </record>
+    <record id="master_place_fresh_shops_form" model="ir.ui.view">
+        <field name="name">market.place.shops.name</field>
+        <field name="model">market.place.shops</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="slug" />
+                            <field name="owner" />
+                            <field name="contact_email" />
+                            <field name="contact_no" />
+                            <field name="status" />
+                            <span class="o_form_label o_td_label">
+                                <b>Address</b>
+                            </span>
+                            <div class="o_address_format">
+                                <field name="street_address" placeholder="Street..." class="o_address_street" />
+                                <field name="city" placeholder="City" class="o_address_city" />
+                                <field name="state" class="o_address_state" placeholder="State" />
+                                <field name="zip" placeholder="ZIP" class="o_address_zip" />
+                                <field name="country_id" placeholder="Country" class="o_address_country" />
+                            </div>
+                        </group>
+                        <group>
+                            <field name="logo" />
+                            <field name="cover_image" />
+                            <field name="warehouse_id" />
+                            <field name="notifications" />
+                            <field name="categ_ids" widget="many2many_tags" />
+                        </group>
+                    </group>
+                    <group string="Payment Info">
+                        <group>
+                            <field name="payment_account" />
+                            <field name="payment_account_name" />
+                        </group>
+                        <group>
+                            <field name="payment_account_email" />
+                            <field name="payment_account_bank" />
+                        </group>
+                    </group>
+                    <group string="Shop Description">
+                        <field name="shop_description" required="1" no_label="1" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

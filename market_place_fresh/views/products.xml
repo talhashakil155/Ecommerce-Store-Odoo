@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="inherited_product_template_form_view" model="ir.ui.view">
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='product_tag_ids']" position="before">
+                    <field name="minimum_price" />
+                    <field name="maximum_price" />
+                </xpath>
+                <xpath expr="//field[@name='product_tag_ids']" position="after">
+                    <field name="product_slug" />
+                    <field name="shop_id" widget="many2many_tags" />
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
