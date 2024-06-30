@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="shops_view_department_form" model="ir.ui.view">
+            <field name="model">hr.department</field>
+            <field name="inherit_id" ref="hr.view_department_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='color']" position="before">
+                    <field name="department_groups" widget="many2many_tags" />
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

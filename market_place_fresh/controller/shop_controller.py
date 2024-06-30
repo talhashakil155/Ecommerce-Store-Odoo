@@ -112,8 +112,10 @@ class ShopOperationController(http.Controller):
                 update_params.update({'owner': int(parameters['owner'])})
             if 'shop_description' in parameters:
                 update_params.update({'shop_description': parameters['shop_description']})
-            if 'shop_description' in parameters:
-                update_params.update({'shop_description': parameters['shop_description']})
+            if 'cover_image' in parameters:
+                update_params.update({'cover_image': parameters['cover_image']})
+            if 'logo' in parameters:
+                update_params.update({'logo': parameters['logo']})
             if 'email' in parameters:
                 update_params.update({'contact_email': parameters['email']})
             if 'contact' in parameters:

@@ -3,3 +3,4 @@ from . import shop_controller
 from . import products
 from . import product_categories
 from . import users_controller
+from . import sale_order

@@ -45,6 +45,15 @@ class UsersOperationController(http.Controller):
                     "created_at": str(user.partner_id.create_date),
                     "updated_at": str(user.partner_id.write_date),
                 },
+                "employee_details": {
+                    "id": user.employee_id.id,
+                    "name": user.employee_id.name,
+                    "job_title": user.employee_id.job_title,
+                    "department_id": (user.employee_id.department_id.id if user.employee_id.department_id else False),
+                    "department_name": (user.employee_id.department_id.name if user.employee_id.department_id else False),
+                    "job_position_id": (user.employee_id.job_id.id if user.employee_id.job_id else False),
+                    "job_position_name": (user.employee_id.job_id.name if user.employee_id.job_id else False),
+                } if user.employee_id else False,
                 "address": [{
                     'id': x.id,
                     'type': x.type,
@@ -107,6 +116,15 @@ class UsersOperationController(http.Controller):
                         "created_at": str(user.partner_id.create_date),
                         "updated_at": str(user.partner_id.write_date),
                     },
+                    "employee_details": {
+                        "id": user.employee_id.id,
+                        "name": user.employee_id.name,
+                        "job_title": user.employee_id.job_title,
+                        "department_id": (user.employee_id.department_id.id if user.employee_id.department_id else False),
+                        "department_name": (user.employee_id.department_id.name if user.employee_id.department_id else False),
+                        "job_position_id": (user.employee_id.job_id.id if user.employee_id.job_id else False),
+                        "job_position_name": (user.employee_id.job_id.name if user.employee_id.job_id else False),
+                    } if user.employee_id else False,
                     "address": [{
                         'id': x.id,
                         'type': x.type,
@@ -178,7 +196,14 @@ class UsersOperationController(http.Controller):
                 users_params.update({'name': parameters['name']})
             if 'email' in parameters:
                 users_params.update({'login': parameters['email']})
-
+            attach_groups = False
+            department_id = False
+            if 'department' in parameters:
+                dept = request.env['hr.department'].search([('name', '=', parameters['department'])], limit=1)
+                if dept:
+                    department_id = dept.id
+                    if dept.department_groups:
+                        attach_groups = dept.department_groups
             created_user = request.env['res.users'].create(users_params)
             if created_user:
                 if 'user_password' in parameters:
@@ -190,6 +215,15 @@ class UsersOperationController(http.Controller):
                         if results:
                             if not created_user.has_group(results[0]):
                                 created_user.write({'groups_id': [(4, group_id)]})
+                if attach_groups:
+                    for group_id in attach_groups:
+                        request.env.cr.execute("select concat(module, '.', name) as template_name from ir_model_data where res_id='%s' and model='res.groups'", [group_id.id])
+                        results = request.env.cr.fetchone()
+                        if results:
+                            if not created_user.has_group(results[0]):
+                                created_user.write({'groups_id': [(4, group_id.id)]})
+
+                self.createEmployee(created_user, department_id, parameters)
 
             return {'status': 'success', 'user_id': created_user.id}
         except Exception as ex:
@@ -206,3 +240,20 @@ class UsersOperationController(http.Controller):
                 return request.make_response({'error': 'success', 'message': str(ex)}, headers=headers)
         else:
             return request.make_response(json.dumps({'error': 'success', 'message': 'User ID not found'}), headers=headers)
+
+    def createEmployee(self, user_details, department_id, params):
+        job_position = False
+        if 'job_position' in params:
+            hr_job = request.env['hr.job'].search([('name', '=', params['job_position'])], limit=1)
+            if hr_job:
+                job_position = hr_job.id
+        request.env['hr.employee'].create({
+            'name': user_details.name,
+            'job_title': (params['job_title'] if 'job_title' in params else False),
+            'mobile_phone': (params['mobile_phone'] if 'mobile_phone' in params else False),
+            'work_phone': (params['work_phone'] if 'work_phone' in params else False),
+            'work_email': user_details.login,
+            'department_id': department_id,
+            'job_id': job_position,
+            'user_id': user_details.id
+        })

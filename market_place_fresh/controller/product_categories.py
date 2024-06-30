@@ -16,38 +16,43 @@ class ProductCategoriesController(http.Controller):
         headers = [('Content-Type', 'application/json'), ('Cache-Control', 'no-store')]
         for cat in categories:
             childrens = request.env['product.category'].search([('parent_id', '=', cat.id)])
+            products = request.env['product.product'].search([('categ_id', '=', cat.id)])
             cat_response.append({
                 'id': cat.id,
                 'name': cat.name,
                 'display_name': cat.display_name,
                 'slug': cat.cat_slug,
                 'icon': cat.cat_icon,
-                'image': f'/web/image/product.category/{cat.id}/cat_image' if cat.id else False,
+                'image': f'/web/image/product.category/{cat.id}/cat_image' if cat.id else "",
                 'details': cat.cat_details,
-                'type_id': cat.shop_id.id,
+                'type_id': 1,
                 'created_at': str(cat.create_date),
                 'updated_at': str(cat.write_date),
-                'parent_id': (cat.parent_id.id if cat.parent_id else False),
+                'parent_id': (cat.parent_id.id if cat.parent_id else 0),
                 'product_count': cat.product_count,
                 'type': {
-                    'id': cat.shop_id.id,
-                    'slug': cat.shop_id.slug,
+                    'id': 1,
+                    'slug': "grocery",
                     "created_at": str(cat.shop_id.create_date),
                     "updated_at": str(cat.shop_id.write_date),
-                    'logo': f'/web/image/market.place.shops/{cat.shop_id.id}/logo' if cat.shop_id else False,
-                } if cat.shop_id else False,
+                    'logo': f'/web/image/market.place.shops/{cat.shop_id.id}/logo' if cat.shop_id else "",
+                } if cat.shop_id else {},
+                'shops': {
+                    'id': cat.shop_id.id,
+                    'slug': cat.shop_id.slug,
+                } if cat.shop_id else {},
                 'children': [{
                     'id': x.id,
                     'name': x.name,
                     'display_name': x.display_name,
                     'slug': x.cat_slug,
                     'icon': x.cat_icon,
-                    'image': f'/web/image/product.category/{x.id}/cat_image' if x.id else False,
+                    'image': f'/web/image/product.category/{x.id}/cat_image' if x.id else "",
                     'details': x.cat_details,
                     'type_id': x.shop_id.id,
                     'created_at': str(x.create_date),
                     'updated_at': str(x.write_date),
-                    'parent_id': (x.parent_id.id if x.parent_id else False),
+                    'parent_id': (x.parent_id.id if x.parent_id else ""),
                     'product_count': x.product_count
                 } for x in childrens]
             })
@@ -66,32 +71,36 @@ class ProductCategoriesController(http.Controller):
                     'display_name': category.display_name,
                     'slug': category.cat_slug,
                     'icon': category.cat_icon,
-                    'image': f'/web/image/product.category/{category.id}/cat_image' if category.id else False,
+                    'image': f'/web/image/product.category/{category.id}/cat_image' if category.id else "",
                     'details': category.cat_details,
                     'type_id': category.shop_id.id,
                     'created_at': str(category.create_date),
                     'updated_at': str(category.write_date),
-                    'parent_id': (category.parent_id.id if category.parent_id else False),
+                    'parent_id': (category.parent_id.id if category.parent_id else 0),
                     'product_count': category.product_count,
                     'type': {
                         'id': category.shop_id.id,
                         'slug': category.shop_id.slug,
                         "created_at": str(category.shop_id.create_date),
                         "updated_at": str(category.shop_id.write_date),
-                        'logo': f'/web/image/market.place.shops/{category.shop_id.id}/logo' if category.shop_id else False,
-                    } if category.shop_id else False,
+                        'logo': f'/web/image/market.place.shops/{category.shop_id.id}/logo' if category.shop_id else "",
+                    } if category.shop_id else {},
+                    'shops': {
+                        'id': cat.shop_id.id,
+                        'slug': cat.shop_id.slug,
+                    } if cat.shop_id else {},
                     'children': [{
                         'id': x.id,
                         'name': x.name,
                         'display_name': x.display_name,
                         'slug': x.cat_slug,
                         'icon': x.cat_icon,
-                        'image': f'/web/image/product.category/{x.id}/cat_image' if x.id else False,
+                        'image': f'/web/image/product.category/{x.id}/cat_image' if x.id else "",
                         'details': x.cat_details,
                         'type_id': x.shop_id.id,
                         'created_at': str(x.create_date),
                         'updated_at': str(x.write_date),
-                        'parent_id': (x.parent_id.id if x.parent_id else False),
+                        'parent_id': (x.parent_id.id if x.parent_id else 0),
                         'product_count': x.product_count
                     } for x in childrens]
                 }
@@ -165,3 +174,4 @@ class ProductCategoriesController(http.Controller):
             return {'status': 'success'}
         except Exception as ex:
             return {'status': 'error','message': str(ex)}
+
