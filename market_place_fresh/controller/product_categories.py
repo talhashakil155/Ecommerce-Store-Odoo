@@ -106,11 +106,11 @@ class ProductCategoriesController(http.Controller):
                 }
                 return request.make_response(json.dumps({'status': 'success', 'cat_response': cat_response}), headers=headers)
             else:
-                return request.make_response(json.dumps({'status': 'success', 'cat_response': 'Category not found'}), headers=headers)
+                return request.make_response(json.dumps({'status': 'success', 'cat_response': 'Category is not found'}), headers=headers)
         else:
             return request.make_response(json.dumps({'status': 'success', 'cat_response': 'Slug not found'}), headers=headers)
 
-    @http.route('/categories/<int:cat_id>', type='http', methods=['GET'], auth='user', csrf=False)
+    @http.route('/categories/<int:cat_id>/delete', type='http', methods=['GET'], auth='user', csrf=False)
     def delete_category(self, cat_id=False, **kw):
         headers = [('Content-Type', 'application/json'), ('Cache-Control', 'no-store')]
         if cat_id:
@@ -175,3 +175,19 @@ class ProductCategoriesController(http.Controller):
         except Exception as ex:
             return {'status': 'error','message': str(ex)}
 
+    @http.route('/categories/import/newdata', type='json', methods=['POST'], auth='user', csrf=False)
+    def import_categories(self, **kw):
+        parameters = request.get_json_data()
+        category_rows = parameters.get('importData', [])
+        try:
+            idsOfCreatedCategories = []
+            for category_row in category_rows:
+                paramsToPlace = {}
+                for FieldNameToUpdate in category_row:
+                    paramsToPlace.update({FieldNameToUpdate: category_row[FieldNameToUpdate]})
+                createdCategory = request.env['product.category'].create(paramsToPlace)
+                idsOfCreatedCategories.append(createdCategory.id)
+
+            return {'status': 'success', 'created category IDs': idsOfCreatedCategories}
+        except Exception as ex:
+            return {'status': 'error', 'message': str(ex)}
