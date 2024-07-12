@@ -25,5 +25,3 @@ class shopsModel(models.Model):
     payment_account_name = fields.Char("Account Name")
     payment_account_email = fields.Char("Account Email")
     payment_account_bank = fields.Char("Account Bank Name")
-
-    _sql_constraints = [('shop_slug_uniq', 'unique (slug)', 'Shop slug must be unique!')]

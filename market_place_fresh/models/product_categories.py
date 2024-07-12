@@ -8,5 +8,3 @@ class InheritProductCategory(models.Model):
     cat_image = fields.Binary("Image")
     cat_details = fields.Html("Description")
     shop_id = fields.Many2one("market.place.shops", string="Shop ID")
-
-    _sql_constraints = [('cat_slug_uniq', 'unique (cat_slug)', 'Category slug must be unique!')]
