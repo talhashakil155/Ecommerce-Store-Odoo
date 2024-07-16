@@ -21,8 +21,8 @@ class ShopProductsController(http.Controller):
                     'slug': product.product_slug,
                     "image": {
                         "id": "1",
-                        "original": f'http://45.79.219.141:8070/web/image/product.product/{product.id}/image_1920',
-                        "thumbnail": f'http://45.79.219.141:8070/web/image/product.product/{product.id}/image_1920'
+                        "original": product.google_storage,
+                        "thumbnail": product.google_storage
                     },
                     'description': product.description,
                     'product_type': "simple",
@@ -39,6 +39,7 @@ class ShopProductsController(http.Controller):
                     "updated_at": str(product.write_date),
                     "is_taxable": (1 if product.taxes_id else 0),
                     "currency": product.currency_id.name,
+                    "uom_id": product.uom_id.id,
                     "tax_details": [{
                         'tax_id': x.id,
                         'name': x.name,
@@ -181,7 +182,7 @@ class ShopProductsController(http.Controller):
                     'id': product.id,
                     'name': product.name,
                     'slug': product.product_slug,
-                    'product_image': f'/web/image/product.product/{product.id}/image_1920',
+                    'product_image': product.google_storage,
                     'description': product.description,
                     'type': product.detailed_type,
                     'sale_price': product.list_price,

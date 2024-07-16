@@ -13,6 +13,16 @@
                     <field name="product_slug" />
                     <field name="shop_id" />
                     <field name="google_storage" />
+                    <field name="brand" />
+                    <field name="touchgroup" />
+                    <field name="supplier_name" />
+                    <field name="allow_discount" />
+                    <field name="sku_description" />
+                    <field name="selling_price" />
+                    <field name="carton_qty" />
+                    <field name="is_web_plu" />
+                    <field name="webpluid" />
+                    <field name="web_plu_description" />
                 </xpath>
             </field>
         </record>
